@@ -1,4 +1,6 @@
 // deploy/01_deploy_staker.js
+require("dotenv").config()
+const { verify } = require("../utils/verify")
 
 // const { ethers } = require("hardhat");
 
@@ -11,7 +13,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     "ExampleExternalContract"
   );
 
-  await deploy("Staker", {
+  const staker = await deploy("Staker", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
     args: [exampleExternalContract.address],
@@ -60,6 +62,11 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   //     console.log(" ⚠️ Failed to verify contract on Etherscan ");
   //   }
   // }
+      // Verify Contract
+      if (chainId === 11155111 && process.env.ETHERSCAN_API_KEY) {
+        await verify(staker.address, [exampleExternalContract.address])
+        await verify(exampleExternalContract.address, [])
+    }
 };
 
 module.exports.tags = ["Staker"];

@@ -11,6 +11,9 @@ require("@eth-optimism/hardhat-ovm");
 require("@nomiclabs/hardhat-ethers");
 require("@nomiclabs/hardhat-etherscan");
 
+const { ProxyAgent, setGlobalDispatcher } = require("undici")
+const proxyAgent = new ProxyAgent("http://127.0.0.1:7890")
+setGlobalDispatcher(proxyAgent)
 const { isAddress, getAddress, formatUnits, parseUnits } = utils;
 
 /*
